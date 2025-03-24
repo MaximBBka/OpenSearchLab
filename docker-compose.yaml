@@ -1,0 +1,21 @@
+version: '3'
+services:
+  nginx-front:
+    image: nginx:1.17.8
+    ports:
+      - "80:80"
+    volumes:
+      - ./my-error.log:/var/log/error.log
+      - ./my-acces.log:/var/log/access.log
+      - ./nginx-conf-test.conf:/etc/nginx/nginx.conf
+ 
+  fluent-bit:
+    image: docker.io/fluent/fluent-bit
+    container_name: fluent-bit
+    ports:
+      - "2020:2020"  # HTTP API
+      - "2021:2021"  # TCP input
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./my-error.log:/error.log
+      - ./my-acces.log:/access.log
